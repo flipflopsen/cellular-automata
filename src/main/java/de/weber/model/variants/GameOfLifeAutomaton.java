@@ -18,7 +18,6 @@ public class GameOfLifeAutomaton extends Automaton {
     }
 
     protected synchronized Cell transform(Cell cell, Cell[] neighbors) {
-
         var amountOfLivingNeighbors = (int) Arrays.stream(neighbors)
                 .filter(c -> c != null && c.getState() == 1)
                 .count();

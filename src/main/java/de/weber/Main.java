@@ -9,7 +9,6 @@ import de.weber.util.loggerino.LoggerFactorino;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
-import java.io.IOException;
 
 public class Main extends Application {
     public IJFXManagerino jfxManagerino;
@@ -19,11 +18,12 @@ public class Main extends Application {
         initializeDependencyInjection();
         initializeMicroBus();
         initializeServices();
+        prepareShutdownHook();
         launch(args);
     }
 
     @Override
-    public void start(Stage primaryStage) throws IOException {
+    public void start(Stage primaryStage) {
         jfxManagerino = DInjector.getService(IJFXManagerino.class);
         jfxManagerino.initializeService(primaryStage);
 
@@ -47,6 +47,12 @@ public class Main extends Application {
         //DInjector.getService(ISimulationThread.class);
         //DInjector.getService(IPopulationPanelView.class);
         //DInjector.getService(IPopulationController.class);
+    }
+
+    private static void prepareShutdownHook() {
+        Runtime.getRuntime().addShutdownHook(new Thread( () -> {
+            DInjector.getService(IAutomataService.class).clearAutomataFolder();
+        }));
     }
 
 }

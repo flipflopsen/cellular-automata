@@ -13,7 +13,6 @@ public class SimulationThread extends Thread implements ISimulationThread {
 
     private volatile Object syncObj = new Object();
     private Automaton automaton;
-    //public IPopulationPanelView populationPanel = DInjector.getService(IPopulationPanelView.class);
     public IPopulationPanelView populationPanel;
     private volatile long simulationPace;
     private volatile boolean isStopped = false;
@@ -52,7 +51,11 @@ public class SimulationThread extends Thread implements ISimulationThread {
 
     @Override
     public void pauseSimulation() {
-        isStopped = true;
+        if (isRunning()) {
+            isStopped = true;
+        } else {
+            logger.warn("You've tried to pause the simulation, but it's not running at the moment..");
+        }
     }
 
     @Override
@@ -67,9 +70,10 @@ public class SimulationThread extends Thread implements ISimulationThread {
 
     @Override
     public void startSimulation() {
+        logger.info("IsStopped: {0}, isInterrupted: {1}", isStopped, isInterrupted());
         if (!isStopped) {
             start();
-        } else{
+        } else {
             isStopped = false;
             synchronized (syncObj) {
                 syncObj.notify();
@@ -84,6 +88,7 @@ public class SimulationThread extends Thread implements ISimulationThread {
 
     @Override
     public void setAutomaton(Automaton automaton) {
+        logger.debug("Setting automaton: {0}", automaton.toString());
         this.automaton = automaton;
     }
 

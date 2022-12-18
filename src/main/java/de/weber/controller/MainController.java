@@ -77,22 +77,27 @@ public class MainController {
 
     //Constructor
     public MainController() {
-        initialize();
+        initializeDeps();
+        initializeJfx();
     }
 
-    public void initialize() {
+    public void initializeDeps() {
+        automaton = DInjector.getService(IAutomataService.class).retrieveSimulationFromFile(simulationIdentifier);
+
+        logger.info("Automaton null: {0}", automaton == null);
+
+        populationPanelView = new PopulationPanelView();
+        populationController = new PopulationController(populationPanelView);
+
+        populationPanelView.initializePanel(populationController);
+        populationPanelView.setAutomaton(automaton);
+
+        simulationThread = new SimulationThread(populationPanelView);
+        simulationThread.setAutomaton(automaton);
+    }
+
+    public void initializeJfx() {
         Platform.runLater( () -> {
-            automaton = new GameOfLifeAutomaton();
-
-            populationPanelView = new PopulationPanelView();
-            populationController = new PopulationController(populationPanelView);
-
-            populationPanelView.initializePanel(populationController);
-            populationPanelView.setAutomaton(automaton);
-
-            simulationThread = new SimulationThread(populationPanelView);
-            simulationThread.setAutomaton(automaton);
-
             statesView = new StatesView(this);
             statesView.resetStateColors();
 
@@ -144,6 +149,7 @@ public class MainController {
         jfxManagerino.initNewSubStage(simulationIdentifier, simulationIdentifier + "-editor", "editor", simulationIdentifier + " - Code Editor", 720, 800);
         var controller = (EditorController) jfxManagerino.getControllerGeneric(simulationIdentifier + "-editor");
         controller.setCodeAreaText(DInjector.getService(IAutomataService.class).getFileContents(simulationIdentifier));
+        controller.setSimulationIdentifier(simulationIdentifier);
         jfxManagerino.showStage(JFXManagerino.JFXStageLevel.SUB, simulationIdentifier + "-editor");
     }
 
@@ -290,7 +296,6 @@ public class MainController {
             } catch (Throwable e) {
                 logger.error(NEXT_GENERATION_ERROR);
             }
-            populationPanelView.setAutomaton(automaton);
             populationPanelView.draw();
         });
     }
@@ -302,7 +307,6 @@ public class MainController {
                 if (automaton != null) {
                     automaton.randomPopulation();
                     automaton.nextGeneration();
-                    populationPanelView.setAutomaton(automaton);
                 }
             } catch (Throwable e) {
                 logger.error(NEXT_GENERATION_ERROR);
@@ -371,8 +375,6 @@ public class MainController {
     @FXML
     public void onStartSimulationButton(ActionEvent actionEvent) {
         pause_sim_btn.setSelected(false);
-        pause_sim_btn.setDisable(false);
-
         try {
             setPopulationColorSpectrum();
         } catch (Throwable e) {
@@ -382,30 +384,30 @@ public class MainController {
         if (automaton != null && populationPanelView.areColorsSet()) {
             if (simulationThread == null) {
                 simulationThread = new SimulationThread(populationPanelView);
-                simulationThread.setAutomaton(this.automaton);
+                simulationThread.setAutomaton(automaton);
             }
             simulationThread.setSimulationPace((long) sim_pace_slider.getValue());
             logger.debug("Starting sim..");
             simulationThread.startSimulation();
             start_sim_btn.setSelected(true);
             start_sim_btn.setDisable(true);
+            pause_sim_btn.setDisable(false);
         } else {
             start_sim_btn.setSelected(false);
+            start_sim_btn.setDisable(true);
             pause_sim_btn.setSelected(true);
         }
     }
 
     @FXML
     public void onPauseSimulationButton(ActionEvent actionEvent) {
-        Platform.runLater(() -> {
-            if (simulationThread.isRunning()) {
-                start_sim_btn.setSelected(false);
-                start_sim_btn.setDisable(false);
-                pause_sim_btn.setSelected(true);
-                pause_sim_btn.setDisable(true);
-                simulationThread.pauseSimulation();
-            }
-        });
+        start_sim_btn.setDisable(false);
+        start_sim_btn.setSelected(false);
+        pause_sim_btn.setSelected(true);
+        pause_sim_btn.setDisable(true);
+        if (simulationThread.isRunning()) {
+            simulationThread.pauseSimulation();
+        }
     }
 
 
@@ -474,7 +476,7 @@ public class MainController {
             simulationThread.pauseSimulation();
         }
 
-        newSizePair.ifPresent(widthHeigth -> {
+        newSizePair.ifPresent(widthHeight -> {
             var w = newSizePair.get().getKey();
             var h= newSizePair.get().getValue();
             try {
@@ -505,7 +507,8 @@ public class MainController {
 
         newAutomatonDialog.getDialogPane().lookupButton(ButtonType.OK).disableProperty()
                 .bind(Bindings.createBooleanBinding( () ->
-                                !StaticValidator.isJavaClassNameConform(name.getText()),
+                                !StaticValidator.isJavaClassNameConform(name.getText()) ||
+                                        !DInjector.getService(IAutomataService.class).validateFileExistence(name.getText()),
                                 name.textProperty()));
 
         newAutomatonDialog.setResultConverter(dialogButton -> {
@@ -516,24 +519,16 @@ public class MainController {
         });
 
         Optional<String> newAutomatonIdentifier = newAutomatonDialog.showAndWait();
-
-        if (newAutomatonIdentifier.isPresent()) {
-            createNewAutomatonFromDialog(newAutomatonIdentifier.get());
-        }
-
+        newAutomatonIdentifier.ifPresent(this::createNewAutomatonFromDialog);
     }
     private void createNewAutomatonFromDialog(String filename) {
-        DInjector.getService(IAutomataService.class).createDefaultFolderAndFile(filename);
         DInjector.getService(IAutomataService.class).createNewSimulationFromFile(filename);
     }
 
-
-
-    public synchronized void simulationPaceHandler(ObservableValue o, Number old, Number n) {
+    public synchronized void simulationPaceHandler(ObservableValue<? extends Number> o, Number old, Number n) {
         if (this.simulationThread != null)
-            this.simulationThread.setSimulationPace(550 - n.intValue());
+            this.simulationThread.setSimulationPace((long) 550 - n.intValue());
     }
-
 
     public Automaton getAutomaton() {
         return this.automaton;
@@ -544,7 +539,29 @@ public class MainController {
     }
 
     public void setAutomaton(Automaton automaton) {
+        if (simulationThread != null && simulationThread.isRunning()) {
+            //simulationThread.pauseSimulation();
+            Platform.runLater(() -> {
+                start_sim_btn.setSelected(false);
+                pause_sim_btn.setSelected(true);
+            });
+        }
+        logger.debug("Setting new automaton into: {0}", simulationIdentifier);
         this.automaton = automaton;
+
+        if (simulationThread == null) {
+            simulationThread = new SimulationThread(populationPanelView);
+        }
+
+        simulationThread.setAutomaton(automaton);
+        populationController.setAutomaton(automaton);
+        populationPanelView.setAutomaton(automaton);
+
+        Platform.runLater(() -> {
+            statesView.resetStateColors();
+            populationPanelView.draw();
+            view_torus_btn.setSelected(automaton.isTorus());
+        });
     }
 
     public void setSimulationIdentifier(String simulationIdentifier) {
@@ -557,5 +574,9 @@ public class MainController {
 
     public void stopSimulation() {
         simulationThread.stopSimulation();
+    }
+
+    public void pauseSimulation() {
+        simulationThread.pauseSimulation();
     }
 }

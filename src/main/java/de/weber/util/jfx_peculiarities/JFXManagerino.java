@@ -1,6 +1,8 @@
 package de.weber.util.jfx_peculiarities;
 
 import de.weber.controller.MainController;
+import de.weber.services.interfaces.IAutomataService;
+import de.weber.util.diy_framwork.DInjector;
 import de.weber.util.diy_framwork.annotations.Vessel;
 import de.weber.util.jfx_peculiarities.interfaces.IJFXManagerino;
 import de.weber.util.loggerino.LoggerFactorino;
@@ -68,7 +70,7 @@ public class JFXManagerino implements IJFXManagerino {
         }
     }
 
-    public String initNewRootStage(String identifier, String filename, String title, int width, int height) {
+    public String initNewRootStage(String identifier, String fxmlFileName, String title, int width, int height) {
         String newIdentifier = identifier;
         try {
             if (stageMap.getOrDefault(JFXStageLevel.ROOT, null) == null) {
@@ -93,7 +95,7 @@ public class JFXManagerino implements IJFXManagerino {
                 stageReferenceMap.put(newIdentifier, new CopyOnWriteArrayList<>());
             }
 
-            var scene = loader.createSceneFromFXML(newIdentifier, "/fxml/" + filename + ".fxml", width, height);
+            var scene = loader.createSceneFromFXML(newIdentifier, "/fxml/" + fxmlFileName + ".fxml", width, height);
             scene.getStylesheets().add("css/dark.css");
             stageLevelSceneIdentifierMap.get(JFXStageLevel.ROOT).put(newIdentifier, scene);
             var stage = stageMap.get(JFXStageLevel.ROOT).get(newIdentifier);
@@ -105,7 +107,7 @@ public class JFXManagerino implements IJFXManagerino {
             return newIdentifier;
         } catch (IOException e) {
             e.printStackTrace();
-            logger.error("Failed to locate the FXML file: {} ", filename);
+            logger.error("Failed to locate the FXML file: {} ", fxmlFileName);
             var stage = stageMap.get(JFXStageLevel.ROOT).get(newIdentifier);
             stage.setTitle(title);
             logger.info("Program execution will continue without a set Scene on the Main stage, keep in mind to set it manually!");
@@ -164,7 +166,8 @@ public class JFXManagerino implements IJFXManagerino {
         stage.setOnCloseRequest(we -> {
             if (!finalNewIdentifier.contains("editor")) {
                 var controller = (MainController) getControllerGeneric(finalNewIdentifier);
-                controller.stopSimulation();
+                //controller.pauseSimulation();
+                DInjector.getService(IAutomataService.class).removeAutomatonSession(controller.getSimulationIdentifier());
             }
             stageReferenceMap.get(finalNewIdentifier).forEach(sub -> {
                 if (stageMap.get(JFXStageLevel.ROOT).containsKey(sub))
@@ -230,6 +233,7 @@ public class JFXManagerino implements IJFXManagerino {
     }
 
     public <T> T getControllerGeneric(String stageIdentifier) {
+        logger.debug("Trying to get controller generic for identififer: {0}", stageIdentifier);
         return loader.getLoader(stageIdentifier).getController();
     }
 

@@ -1,0 +1,18 @@
+
+0
+java:S1220""Move this file to a named package.
+o	java:S115"ZRename this constant name to match the regular expression '^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$'.(Û‡í”
+t	java:S115"ZRename this constant name to match the regular expression '^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$'.(­Â¾¡øÿÿÿÿ
+t	java:S115"ZRename this constant name to match the regular expression '^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$'.(¹ë•ûÿÿÿÿ
+t	java:S115"ZRename this constant name to match the regular expression '^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$'.(Æø·úÿÿÿÿ
+t	java:S115	"ZRename this constant name to match the regular expression '^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$'.(Ùıõúÿÿÿÿÿ
+[
+java:S1124"EReorder the modifiers to comply with the Java Language Specification.(Û‡í”
+`
+java:S1124"EReorder the modifiers to comply with the Java Language Specification.(­Â¾¡øÿÿÿÿ
+`
+java:S1124"EReorder the modifiers to comply with the Java Language Specification.(¹ë•ûÿÿÿÿ
+`
+java:S1124"EReorder the modifiers to comply with the Java Language Specification.(Æø·úÿÿÿÿ
+`
+java:S1124	"EReorder the modifiers to comply with the Java Language Specification.(Ùıõúÿÿÿÿÿ
