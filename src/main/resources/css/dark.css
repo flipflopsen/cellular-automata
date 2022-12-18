@@ -1,0 +1,66 @@
+.root {
+    -fx-accent: #242936;
+    -fx-focus-color: -fx-accent;
+    -fx-base: #1f2430;
+    -fx-control-inner-background: derive(-fx-base, 25%);
+    -fx-control-inner-background-alt: -fx-control-inner-background ;
+}
+
+.menu-bar {
+    -fx-background-color: #242936;
+}
+
+.label {
+    -fx-text-fill: #cccac2;
+    -fx-font-weight: bold;
+}
+
+.text-field {
+    -fx-prompt-text-fill: gray;
+}
+
+.split-pane:horizontal > .split-pane-divider {
+    -fx-background-color: -fx-accent;
+    -fx-border-color: -fx-base;
+    -fx-border-width: 1px;
+    -fx-border-radius: 1px;
+    -fx-padding: 0 0.1em 0 0.1em;
+}
+
+.color-picker {
+    -fx-background-color: -fx-accent;
+}
+.radio-button {
+    -fx-unselected-color: -fx-accent;
+    -fx-selected-color: #384254;
+}
+
+.titulo{
+    -fx-font-weight: bold;
+    -fx-font-size: 18px;
+}
+
+.button{
+    -fx-focus-traversable: false;
+    -fx-background-color: -fx-accent;
+}
+
+.button:hover{
+    -fx-text-fill: white;
+}
+
+.separator *.line {
+    -fx-border-width: 1px;
+}
+
+.scroll-bar{
+    -fx-background-color: derive(-fx-base,45%)
+}
+
+.slider {
+    -fx-progress-color: #80bfff;
+}
+
+.button:default {
+    -fx-base: -fx-accent ;
+}

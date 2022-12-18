@@ -1,0 +1,9 @@
+
+`	java:S112!"FDefine and throw a dedicated exception instead of using a generic one.(Á€¦ïüÿÿÿÿ
+l
+java:S1104
+"VMake eventClass a static final constant or non-public and provide accessors if needed.(«Ûìú
+@
+java:S1172"*Remove this unused method parameter "cls".(Âã¡
+h
+java:S1128"FRemove this unused import 'java.util.concurrent.atomic.AtomicBoolean'.(§­‹¼üÿÿÿÿ8ı€²›Ë0

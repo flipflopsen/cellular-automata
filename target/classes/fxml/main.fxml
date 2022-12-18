@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckMenuItem?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.input.KeyCodeCombination?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+
+<!--<?import de.weber.view.PopulationPanelView?>-->
+
+<?import javafx.scene.control.ToggleButton?>
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="820.0" stylesheets="@../css/dark.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.weber.controller.MainController">
+   <children>
+      <MenuBar>
+        <menus>
+          <Menu mnemonicParsing="true" text="_Automat">
+            <items>
+              <MenuItem fx:id="a_new" onAction="#a_newActionHandler" text="Neu...">
+                     <accelerator>
+                        <KeyCodeCombination alt="UP" code="N" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                     </accelerator></MenuItem>
+                  <MenuItem fx:id="a_load" onAction="#a_loadActionHandler" text="Laden...">
+                     <accelerator>
+                        <KeyCodeCombination alt="UP" code="L" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                     </accelerator></MenuItem>
+                  <SeparatorMenuItem mnemonicParsing="false" />
+                  <MenuItem fx:id="a_editor" onAction="#a_editorActionHandler" text="Editor">
+                     <accelerator>
+                        <KeyCodeCombination alt="UP" code="E" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                     </accelerator></MenuItem>
+                  <SeparatorMenuItem mnemonicParsing="false" />
+                  <MenuItem fx:id="a_quit" onAction="#a_quitActionHandler" text="Beenden">
+                     <accelerator>
+                        <KeyCodeCombination alt="UP" code="Q" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                     </accelerator></MenuItem>
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="true" text="_Population">
+            <items>
+              <MenuItem fx:id="p_resize" onAction="#p_resizeActionHandler" text="Größe ändern...">
+                     <accelerator>
+                        <KeyCodeCombination alt="UP" code="G" control="DOWN" meta="UP" shift="DOWN" shortcut="UP" />
+                     </accelerator></MenuItem>
+                  <MenuItem fx:id="p_delete" onAction="#p_deleteActionHandler" text="Löschen">
+                     <accelerator>
+                        <KeyCodeCombination alt="UP" code="L" control="DOWN" meta="UP" shift="DOWN" shortcut="UP" />
+                     </accelerator></MenuItem>
+                  <MenuItem fx:id="p_generate" onAction="#p_generateActionHandler" text="Erzeugen">
+                     <accelerator>
+                        <KeyCodeCombination alt="UP" code="Z" control="DOWN" meta="UP" shift="DOWN" shortcut="UP" />
+                     </accelerator></MenuItem>
+                  <CheckMenuItem fx:id="p_chkTorus" onAction="#p_chkTorusActionHandler" text="Torus">
+                     <accelerator>
+                        <KeyCodeCombination alt="UP" code="T" control="DOWN" meta="UP" shift="DOWN" shortcut="UP" />
+                     </accelerator></CheckMenuItem>
+                  <SeparatorMenuItem mnemonicParsing="false" />
+                  <MenuItem fx:id="p_enlarge" onAction="#p_enlargeActionHandler" text="Vergrößern">
+                     <accelerator>
+                        <KeyCodeCombination alt="UP" code="I" control="DOWN" meta="UP" shift="DOWN" shortcut="UP" />
+                     </accelerator></MenuItem>
+                  <MenuItem fx:id="p_shrink" onAction="#p_shrinkActionHandler" text="Verkleinern">
+                     <accelerator>
+                        <KeyCodeCombination alt="UP" code="O" control="DOWN" meta="UP" shift="DOWN" shortcut="UP" />
+                     </accelerator></MenuItem>
+                  <SeparatorMenuItem mnemonicParsing="false" />
+                  <Menu fx:id="p_save" text="Speichern">
+                    <items>
+                      <MenuItem fx:id="p_save_xml" onAction="#p_save_xmlActionHandler" text="XML">
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="X" control="DOWN" meta="UP" shift="DOWN" shortcut="UP" />
+                           </accelerator></MenuItem>
+                        <MenuItem fx:id="p_save_serialized" onAction="#p_save_serializedActionHandler" text="Serialisieren">
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="S" control="DOWN" meta="UP" shift="DOWN" shortcut="UP" />
+                           </accelerator></MenuItem>
+                    </items>
+                  </Menu>
+                  <Menu fx:id="p_load" text="Laden">
+                     <items>
+                        <MenuItem fx:id="p_load_xml" onAction="#p_load_xmlActionHandler" text="XML" />
+                        <MenuItem fx:id="p_load_serialized" onAction="#p_load_serializedActionHandler" text="Serialisieren" />
+                     </items>
+                  </Menu>
+                  <SeparatorMenuItem mnemonicParsing="false" />
+                  <MenuItem fx:id="p_print" onAction="#p_printActionHandler" text="Drucken">
+                     <accelerator>
+                        <KeyCodeCombination alt="UP" code="P" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                     </accelerator></MenuItem>
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="true" text="_Simulation">
+            <items>
+              <MenuItem fx:id="s_step" onAction="#s_stepActionHandler" text="Schritt">
+                     <accelerator>
+                        <KeyCodeCombination alt="DOWN" code="S" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                     </accelerator></MenuItem>
+                  <MenuItem fx:id="s_start" onAction="#s_startActionHandler" text="Start">
+                     <accelerator>
+                        <KeyCodeCombination alt="DOWN" code="A" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                     </accelerator></MenuItem>
+                  <MenuItem fx:id="s_stop" onAction="#s_stopActionHandler" text="Stopp" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+      <AnchorPane maxHeight="44.0" maxWidth="763.0" prefHeight="44.0" prefWidth="763.0">
+         <children>
+            <Button fx:id="generate_and_load_btn" contentDisplay="GRAPHIC_ONLY" layoutX="12.0" layoutY="6.0" mnemonicParsing="false" onAction="#onGenerateAndLoadButton" prefHeight="24.0" prefWidth="24.0" text="Generate and Load Population" textOverrun="CLIP">
+                <tooltip><Tooltip text="Generate and load a new Automaton" /></tooltip>
+                <graphic>
+                    <ImageView>
+                        <Image url="@/icons/New24.gif" />
+                    </ImageView>
+                </graphic>
+            </Button>
+            <Button fx:id="load_state_btn" contentDisplay="GRAPHIC_ONLY" layoutX="63.0" layoutY="6.0" mnemonicParsing="false" onAction="#onLoadMachineButton" prefHeight="24.0" prefWidth="24.0" text="Load Machine">
+                <graphic>
+                    <ImageView>
+                        <Image url="@/icons/Load24.gif" />
+                    </ImageView>
+                </graphic>
+                 <tooltip><Tooltip text="Load a saved State" /></tooltip>
+            </Button>
+             <Button fx:id="resize_population_btn" contentDisplay="GRAPHIC_ONLY" layoutX="117.0" layoutY="6.0" mnemonicParsing="false" onAction="#onResizePopulationButton" prefHeight="26.0" prefWidth="33.0" text="Resize Population">
+                 <graphic>
+                     <ImageView>
+                         <Image url="@/icons/Size24.gif" />
+                     </ImageView>
+                </graphic>
+                  <tooltip><Tooltip text="Resize population" /></tooltip>
+             </Button>
+            <Button fx:id="reset_cells_btn" contentDisplay="GRAPHIC_ONLY" layoutX="164.0" layoutY="6.0" mnemonicParsing="false" onAction="#onResetCellsButton" prefHeight="26.0" prefWidth="33.0" text="Reset Cells to 0">
+                <graphic>
+                    <ImageView>
+                        <Image url="@/icons/Delete24.gif" />
+                    </ImageView>
+                </graphic>
+                 <tooltip><Tooltip text="Reset all Cells" /></tooltip>
+            </Button>
+            <Button fx:id="gen_rand_population_btn" contentDisplay="GRAPHIC_ONLY" layoutX="212.0" layoutY="6.0" mnemonicParsing="false" onAction="#onRandomPopulationButton" prefHeight="26.0" prefWidth="33.0" text="Random Population">
+                <graphic>
+                    <ImageView>
+                        <Image url="@/icons/Random24.gif" />
+                    </ImageView>
+                </graphic>
+                 <tooltip><Tooltip text="Generate a random Population" /></tooltip>
+            </Button>
+             <ToggleButton fx:id="view_torus_btn" contentDisplay="GRAPHIC_ONLY" layoutX="257.0" layoutY="6.0" mnemonicParsing="false" onAction="#onTorusSwitchButton" prefHeight="26.0" prefWidth="33.0" text="View as Torus Switch">
+                 <graphic>
+                     <ImageView>
+                         <Image url="@/icons/Torus24.gif" />
+                     </ImageView>
+                 </graphic>
+                  <tooltip><Tooltip text="Switch Torus" /></tooltip>
+             </ToggleButton>
+             <Button fx:id="print_population_btn" contentDisplay="GRAPHIC_ONLY" layoutX="304.0" layoutY="6.0" mnemonicParsing="false" onAction="#onPrintPopulationButton" prefHeight="26.0" prefWidth="33.0" text="Print Population">
+                 <graphic>
+                     <ImageView>
+                         <Image url="@/icons/Print24.gif" />
+                     </ImageView>
+                 </graphic>
+                  <tooltip><Tooltip text="Print the Population" /></tooltip>
+             </Button>
+             <Button fx:id="zoom_in_btn" contentDisplay="GRAPHIC_ONLY" layoutX="362.0" layoutY="6.0" mnemonicParsing="false" onAction="#onZoomInButton" prefHeight="26.0" prefWidth="33.0" text="Zoom In">
+                 <graphic>
+                     <ImageView>
+                         <Image url="@/icons/ZoomIn24.gif" />
+                     </ImageView>
+                 </graphic>
+                  <tooltip><Tooltip text="Zoom in" /></tooltip>
+             </Button>
+             <Button fx:id="zoom_out_btn" contentDisplay="GRAPHIC_ONLY" layoutX="411.0" layoutY="6.0" mnemonicParsing="false" onAction="#onZoomOutButton" prefHeight="26.0" prefWidth="33.0" text="Zoom Out">
+                 <graphic>
+                     <ImageView>
+                         <Image url="@/icons/ZoomOut24.gif" />
+                     </ImageView>
+                 </graphic>
+                  <tooltip><Tooltip text="Zoom out" /></tooltip>
+             </Button>
+             <Button fx:id="cycle_once_btn" contentDisplay="GRAPHIC_ONLY" layoutX="469.0" layoutY="6.0" mnemonicParsing="false" onAction="#onCycleOnceButton" prefHeight="26.0" prefWidth="33.0" text="Cycle once">
+                 <graphic>
+                     <ImageView>
+                         <Image url="@/icons/Step24.gif" />
+                     </ImageView>
+                 </graphic>
+                  <tooltip><Tooltip text="Cycle once" /></tooltip>
+             </Button>
+             <Separator layoutX="108.0" layoutY="1.0" orientation="VERTICAL" prefHeight="42.0" prefWidth="2.0" />
+            <Separator layoutX="353.0" layoutY="1.0" orientation="VERTICAL" prefHeight="42.0" prefWidth="2.0" />
+            <ToggleButton fx:id="start_sim_btn" contentDisplay="GRAPHIC_ONLY" layoutX="519.0" layoutY="6.0" mnemonicParsing="false" onAction="#onStartSimulationButton" prefHeight="26.0" prefWidth="33.0" text="Start Simulation">
+                <graphic>
+                    <ImageView>
+                        <Image url="@/icons/Start24.gif" />
+                    </ImageView>
+                </graphic>
+                 <tooltip><Tooltip text="Start Simulation" /></tooltip>
+            </ToggleButton>
+             <ToggleButton fx:id="pause_sim_btn" contentDisplay="GRAPHIC_ONLY" layoutX="570.0" layoutY="6.0" mnemonicParsing="false" onAction="#onPauseSimulationButton" prefHeight="26.0" prefWidth="33.0" text="Pause Simulation">
+                 <graphic>
+                     <ImageView>
+                         <Image url="@/icons/Pause24.gif" />
+                     </ImageView>
+                </graphic>
+                  <tooltip><Tooltip text="Pause Simulation" /></tooltip>
+             </ToggleButton>
+             <Separator layoutX="458.0" orientation="VERTICAL" prefHeight="42.0" prefWidth="2.0" />
+            <Separator layoutX="617.0" orientation="VERTICAL" prefHeight="42.0" prefWidth="2.0" />
+            <Slider fx:id="sim_pace_slider" layoutX="639.0" layoutY="14.0"/>
+         </children>
+      </AnchorPane>
+      <SplitPane dividerPositions="0.15805946791862285" prefHeight="624.0" prefWidth="1280.0" VBox.vgrow="SOMETIMES">
+        <items>
+            <VBox fx:id="states" fillWidth="false" maxHeight="1.7976931348623157E308" maxWidth="199.0" minWidth="199.0" prefHeight="612.0" prefWidth="199.0" SplitPane.resizableWithParent="false">
+               <children>
+               </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <padding>
+                  <Insets top="7.0" />
+               </padding>
+            </VBox>
+             <ScrollPane fx:id="scrollP" prefHeight="622.0" prefWidth="1073.0">
+                       <!--<PopulationPanel fx:id="populationPanel" prefHeight="625.0" prefWidth="1072.0" />-->
+             </ScrollPane>
+        </items>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+      </SplitPane>
+      <Label text="Welcome to the Party">
+         <VBox.margin>
+            <Insets left="5.0" top="3.0" />
+         </VBox.margin>
+      </Label>
+   </children>
+</VBox>

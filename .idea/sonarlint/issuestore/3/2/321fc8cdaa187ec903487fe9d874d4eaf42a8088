@@ -1,0 +1,13 @@
+
+J
+java:S3740"/Provide the parametrized type for this generic.(Ô‡±ùüÿÿÿÿ
+E
+java:S3740I"/Provide the parametrized type for this generic.(¾©ÄÊ
+i
+java:S3824L"NReplace this "Map.get()" and condition with a call to "Map.computeIfAbsent()".(ŸüØ¬ÿÿÿÿÿ
+m
+java:S3776u"RRefactor this method to reduce its Cognitive Complexity from 19 to the 15 allowed.(øó·ıÿÿÿÿ
+u
+java:S2142‡"^Either re-interrupt this method or rethrow the "InterruptedException" that can be caught here.(ä ¹€
+H
+java:S1181¥"%Catch Exception instead of Throwable.(•”ø¾øÿÿÿÿ8òâ“õÉ0
